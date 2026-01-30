@@ -19,6 +19,15 @@
         .material-card:hover { transform: translateY(-5px); }
         .admin-section { display: none; background: #fff3cd; border-left: 5px solid #ffc107; }
         .mobile-warning { display: none; }
+        
+        /* নতুন স্টাইল যোগ করা হয়েছে */
+        .offcanvas { background: linear-gradient(135deg, #1a237e 0%, #311b92 100%); color: white; }
+        .offcanvas .nav-link { color: rgba(255,255,255,0.9) !important; }
+        .offcanvas .nav-link:hover { color: white !important; background: rgba(255,255,255,0.1); }
+        .delete-btn { position: absolute; top: 10px; right: 10px; z-index: 10; }
+        .file-preview { max-width: 100%; height: auto; border-radius: 5px; margin: 10px 0; }
+        .video-preview { width: 100%; height: 200px; border-radius: 5px; margin: 10px 0; }
+        
         @media (max-width: 768px) {
             .mobile-warning { display: block; }
             body { font-size: 14px; }
@@ -27,21 +36,62 @@
     </style>
 </head>
 <body>
-    <!-- Mobile Warning -->
-    <div class="mobile-warning alert alert-info m-2">
-        <i class="fas fa-mobile-alt"></i> মোবাইলে সুন্দরভাবে দেখতে ক্লিক করুন: 
-        <button class="btn btn-sm btn-primary" onclick="requestDesktop()">ডেস্কটপ ভিউ</button>
+    <!-- Offcanvas Sidebar Menu (Three Lines Menu) -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebarMenu">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title">
+                <i class="fas fa-graduation-cap"></i> শিক্ষা পোর্টাল
+            </h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#home">
+                        <i class="fas fa-home"></i> হোম
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#materials">
+                        <i class="fas fa-book"></i> শিক্ষা উপকরণ
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#about">
+                        <i class="fas fa-info-circle"></i> সম্পর্কে
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#help">
+                        <i class="fas fa-question-circle"></i> সাহায্য
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#feedback">
+                        <i class="fas fa-comment-dots"></i> মতামত
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="showAdminLogin()">
+                        <i class="fas fa-user-shield"></i> অ্যাডমিন লগিন
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
 
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container">
+            <!-- Three Lines Menu Button -->
+            <button class="btn btn-outline-light me-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu">
+                <i class="fas fa-bars"></i>
+            </button>
+            
             <a class="navbar-brand" href="#">
                 <i class="fas fa-graduation-cap"></i> শিক্ষা পোর্টাল
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link active" href="#home">হোম</a></li>
@@ -52,7 +102,7 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
+    <!-- Hero Section (পুরানো ঠিক আছে) -->
     <section id="home" class="hero-section">
         <div class="container text-center">
             <h1 class="display-5 fw-bold">ডিজিটাল শিক্ষা পোর্টাল</h1>
@@ -61,7 +111,7 @@
         </div>
     </section>
 
-    <!-- Admin Login (Hidden Initially) -->
+    <!-- Admin Login (পুরানো ঠিক আছে) -->
     <div id="adminLogin" class="container mt-4" style="display: none;">
         <div class="card shadow">
             <div class="card-header bg-warning">
@@ -79,11 +129,14 @@
         </div>
     </div>
 
-    <!-- Admin Panel (Hidden Initially) -->
+    <!-- Admin Panel (আপডেট করা হয়েছে) -->
     <div id="adminPanel" class="container mt-4 admin-section" style="display: none;">
         <div class="card shadow">
-            <div class="card-header bg-success text-white">
+            <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
                 <h5 class="mb-0"><i class="fas fa-user-shield"></i> অ্যাডমিন প্যানেল - শুধু আপনার জন্য</h5>
+                <button class="btn btn-sm btn-light" onclick="logoutAdmin()">
+                    <i class="fas fa-sign-out-alt"></i> লগআউট
+                </button>
             </div>
             <div class="card-body">
                 <h6>নতুন ফাইল যোগ করুন:</h6>
@@ -129,56 +182,43 @@
                     </div>
                 </div>
                 
-                <!-- Instructions -->
+                <!-- Direct File Upload Section (নতুন যোগ করা হয়েছে) -->
                 <div class="mt-4">
-                    <h6><i class="fas fa-info-circle"></i> কিভাবে ফাইল আপলোড দিবেন:</h6>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h6><i class="fab fa-google-drive text-primary"></i> Google Drive</h6>
-                                    <ol class="small">
-                                        <li>drive.google.com এ যান</li>
-                                        <li>ফাইল আপলোড করুন</li>
-                                        <li>লিংক শেয়ার করুন</li>
-                                        <li>"Anyone with link" করুন</li>
-                                        <li>লিংক কপি করুন</li>
-                                    </ol>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h6><i class="fas fa-image text-success"></i> ছবির জন্য</h6>
-                                    <ol class="small">
-                                        <li>imgbb.com এ যান</li>
-                                        <li>ছবি আপলোড করুন</li>
-                                        <li>Direct Link কপি করুন</li>
-                                        <li>লিংক পেস্ট করুন</li>
-                                    </ol>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h6><i class="fab fa-youtube text-danger"></i> ভিডিওর জন্য</h6>
-                                    <ol class="small">
-                                        <li>YouTube এ আপলোড করুন</li>
-                                        <li>ভিডিও লিংক কপি করুন</li>
-                                        <li>লিংক পেস্ট করুন</li>
-                                    </ol>
-                                </div>
-                            </div>
-                        </div>
+                    <h6><i class="fas fa-cloud-upload-alt"></i> সরাসরি ছবি/ভিডিও আপলোড:</h6>
+                    <div class="border rounded p-3 text-center mb-3" onclick="document.getElementById('directUpload').click()" style="cursor: pointer; background: #f8f9fa;">
+                        <i class="fas fa-cloud-upload-alt fa-2x text-primary"></i>
+                        <p class="mb-0">ছবি/ভিডিও নির্বাচন করুন</p>
+                        <small class="text-muted">(PNG, JPG, MP4, AVI - সর্বোচ্চ 10MB)</small>
+                    </div>
+                    <input type="file" id="directUpload" style="display: none;" accept="image/*,video/*" onchange="handleDirectUpload(this)">
+                    <div id="uploadPreview" class="mt-2"></div>
+                </div>
+                
+                <!-- File Management Section (নতুন যোগ করা হয়েছে) -->
+                <div class="mt-4">
+                    <h6><i class="fas fa-list"></i> বিদ্যমান ফাইল ম্যানেজ করুন:</h6>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-hover">
+                            <thead>
+                                <tr>
+                                    <th>নাম</th>
+                                    <th>ক্লাস</th>
+                                    <th>বিষয়</th>
+                                    <th>ধরন</th>
+                                    <th>কার্যক্রম</th>
+                                </tr>
+                            </thead>
+                            <tbody id="fileManagementTable">
+                                <!-- Files will be loaded here -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Materials Display -->
+    <!-- Materials Display (পুরানো ঠিক আছে) -->
     <section id="materials" class="container mt-5">
         <h3 class="mb-4"><i class="fas fa-book-open"></i> শিক্ষা উপকরণ</h3>
         
@@ -224,6 +264,77 @@
         <!-- Materials Grid -->
         <div class="row" id="materialsGrid">
             <!-- Dynamic Content -->
+        </div>
+    </section>
+
+    <!-- New Sections: About, Help, Feedback (নতুন যোগ করা হয়েছে) -->
+    
+    <!-- About Section -->
+    <section id="about" class="container mt-5">
+        <div class="card shadow">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="fas fa-info-circle"></i> সম্পর্কে</h5>
+            </div>
+            <div class="card-body">
+                <p>শিক্ষা পোর্টাল একটি অনলাইন প্ল্যাটফর্ম যেখানে ক্লাস ৬-১০ এর সকল শিক্ষা উপকরণ ডিজিটাল ফরম্যাটে উপলব্ধ। আমাদের লক্ষ্য শিক্ষার্থীদের জন্য সহজে ও দ্রুত শিক্ষা উপকরণ পৌঁছে দেওয়া।</p>
+                <p>এই প্ল্যাটফর্মে শুধু অ্যাডমিন ফাইল আপলোড করতে পারে এবং শিক্ষার্থীরা শুধু পড়তে ও ডাউনলোড করতে পারে।</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Help Section -->
+    <section id="help" class="container mt-5">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-question-circle"></i> সাহায্য</h5>
+            </div>
+            <div class="card-body">
+                <h6>সাধারণ প্রশ্ন:</h6>
+                <div class="accordion" id="helpAccordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#help1">
+                                কিভাবে ফাইল খুঁজে পাবো?
+                            </button>
+                        </h2>
+                        <div id="help1" class="accordion-collapse collapse show" data-bs-parent="#helpAccordion">
+                            <div class="accordion-body">
+                                ফিল্টার ব্যবহার করে ক্লাস, বিষয় ও ফাইলের ধরন অনুযায়ী খুঁজে পাবেন।
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#help2">
+                                কিভাবে ফাইল ডাউনলোড করবো?
+                            </button>
+                        </h2>
+                        <div id="help2" class="accordion-collapse collapse" data-bs-parent="#helpAccordion">
+                            <div class="accordion-body">
+                                ফাইলে ক্লিক করলে তা ওপেন হবে, সেখান থেকে ডাউনলোড করতে পারবেন।
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Feedback Section -->
+    <section id="feedback" class="container mt-5 mb-5">
+        <div class="card shadow">
+            <div class="card-header bg-warning">
+                <h5 class="mb-0"><i class="fas fa-comment-dots"></i> মতামত</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label">আপনার মতামত:</label>
+                    <textarea class="form-control" id="feedbackText" rows="3" placeholder="আপনার মূল্যবান মতামত দিন..."></textarea>
+                </div>
+                <button class="btn btn-primary" onclick="submitFeedback()">
+                    <i class="fas fa-paper-plane"></i> পাঠান
+                </button>
+            </div>
         </div>
     </section>
 

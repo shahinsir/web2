@@ -1,503 +1,120 @@
-/* =================================== */
-/* শিক্ষা পোর্টাল - Custom CSS File */
-/* =================================== */
-
 /* Google Fonts */
 * {
-    font-family: 'Hind Siliguri', 'Segoe UI', sans-serif;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+    font-family: 'Hind Siliguri', sans-serif;
 }
 
-/* Body & General Styles */
 body {
-    color: #333;
-    line-height: 1.6;
-    background-color: #f8f9fa;
     padding-top: 70px;
-    overflow-x: hidden;
+    background: #f8f9fa;
 }
 
-/* Container Fix for Mobile */
-.container {
-    max-width: 100%;
-    padding-left: 15px;
-    padding-right: 15px;
-}
-
-@media (min-width: 768px) {
-    .container {
-        max-width: 720px;
-    }
-}
-
-@media (min-width: 992px) {
-    .container {
-        max-width: 960px;
-    }
-}
-
-@media (min-width: 1200px) {
-    .container {
-        max-width: 1140px;
-    }
-}
-
-/* Navigation Bar */
 .navbar {
     background: linear-gradient(135deg, #1a237e 0%, #311b92 100%);
-    box-shadow: 0 2px 15px rgba(0,0,0,0.2);
-    padding: 12px 0;
 }
 
-.navbar-brand {
-    font-weight: 700;
-    font-size: 1.4rem;
-}
-
-.navbar-brand i {
-    color: #4fc3f7;
-    margin-right: 10px;
-}
-
-.nav-link {
-    font-weight: 500;
-    margin: 0 8px;
-    position: relative;
-    color: rgba(255,255,255,0.9) !important;
-}
-
-.nav-link:hover {
-    color: white !important;
-}
-
-.nav-link.active {
-    color: white !important;
-    font-weight: 600;
-}
-
-/* Mobile Toggler */
-.navbar-toggler {
-    border: 1px solid rgba(255,255,255,0.3);
-    padding: 5px 10px;
-}
-
-.navbar-toggler:focus {
-    box-shadow: none;
-}
-
-/* Hero Section */
 .hero-section {
     background: linear-gradient(135deg, #311b92 0%, #4527a0 100%);
     color: white;
-    padding: 80px 0 60px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
+    padding: 100px 0;
 }
 
-.hero-section h1 {
-    font-weight: 800;
-    margin-bottom: 20px;
-    font-size: 2.2rem;
-}
-
-.hero-section .lead {
-    font-size: 1.2rem;
-    opacity: 0.9;
-    margin-bottom: 25px;
-}
-
-.hero-section p strong {
-    color: #ffeb3b;
-}
-
-/* Mobile Warning */
-.mobile-warning {
-    position: fixed;
-    top: 70px;
-    left: 0;
-    right: 0;
-    z-index: 1030;
-    border-radius: 0;
-    padding: 10px 15px;
-    font-size: 0.9rem;
-}
-
-.mobile-warning .btn {
-    padding: 3px 10px;
-    font-size: 0.85rem;
-    margin-left: 10px;
-}
-
-/* Admin Login */
-#adminLogin {
-    animation: fadeIn 0.5s ease;
-}
-
-.card {
-    border: none;
-    border-radius: 15px;
-    overflow: hidden;
-}
-
-.card-header {
-    border-bottom: none;
-    padding: 15px 20px;
-}
-
-.card-body {
-    padding: 20px;
-}
-
-/* Admin Panel */
-.admin-section {
-    background: #fff9e6;
-    border-left: 5px solid #ffc107;
-    border-radius: 10px;
-    margin-bottom: 30px;
-    animation: slideIn 0.5s ease;
-}
-
-.admin-section .form-select,
-.admin-section .form-control {
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    padding: 10px 15px;
-    font-size: 0.95rem;
-}
-
-.admin-section .btn {
-    border-radius: 8px;
-    padding: 10px 15px;
-    font-weight: 600;
-}
-
-/* Instructions Cards */
-.admin-section .card {
-    height: 100%;
-    border: 1px solid #e0e0e0;
-    transition: all 0.3s;
-}
-
-.admin-section .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-}
-
-.admin-section .card-body {
-    padding: 15px;
-}
-
-.admin-section .card h6 {
-    color: #333;
-    margin-bottom: 15px;
-    font-size: 1rem;
-}
-
-.admin-section ol {
-    padding-left: 20px;
-    margin-bottom: 0;
-}
-
-.admin-section li {
-    margin-bottom: 8px;
-    font-size: 0.85rem;
-    color: #555;
-}
-
-/* Materials Section */
-#materials {
-    padding: 40px 0;
-}
-
-#materials h3 {
-    color: #333;
-    font-weight: 700;
-    margin-bottom: 25px;
-    padding-bottom: 15px;
-    border-bottom: 3px solid #4fc3f7;
-    display: inline-block;
-}
-
-/* Filter Section */
-#materials .row.mb-4 {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    margin-bottom: 30px !important;
-}
-
-#materials .form-select {
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    padding: 10px 15px;
-    font-size: 0.95rem;
-    height: auto;
-}
-
-#materials .btn-outline-primary {
-    border-radius: 8px;
-    padding: 10px 15px;
-    border-width: 2px;
-    font-weight: 600;
-}
-
-/* Material Cards */
 .material-card {
-    background: white;
+    transition: transform 0.3s;
     border: none;
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-    transition: all 0.3s ease;
-    height: 100%;
-    margin-bottom: 25px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
 .material-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    transform: translateY(-5px);
 }
 
-.material-card .card-body {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+.admin-section {
+    display: none;
+    background: #fff3cd;
+    border-left: 5px solid #ffc107;
 }
 
-.material-card .badge {
-    font-size: 0.75rem;
-    padding: 5px 10px;
-    border-radius: 20px;
-    font-weight: 600;
+.mobile-warning {
+    display: none;
 }
 
-.material-card .card-title {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: #333;
-    margin: 15px 0 10px;
-    flex-grow: 1;
-}
-
-.material-card .card-text {
-    font-size: 0.9rem;
-    color: #666;
-    margin-bottom: 20px;
-}
-
-.material-card .btn {
-    border-radius: 8px;
-    padding: 10px 15px;
-    font-weight: 600;
-    margin-top: auto;
-}
-
-/* File Type Colors */
-.text-danger { color: #f44336 !important; }
-.text-success { color: #4caf50 !important; }
-.text-primary { color: #2196f3 !important; }
-.text-warning { color: #ff9800 !important; }
-
-/* Footer */
-footer {
+/* নতুন যোগ করা CSS */
+.offcanvas {
     background: linear-gradient(135deg, #1a237e 0%, #311b92 100%);
     color: white;
-    padding: 30px 0 20px;
-    margin-top: 50px;
 }
 
-footer p {
-    margin-bottom: 10px;
-    opacity: 0.9;
+.offcanvas .nav-link {
+    color: rgba(255,255,255,0.9) !important;
+    padding: 12px 15px !important;
+    margin: 5px 0;
+    border-radius: 8px;
 }
 
-footer .small {
-    font-size: 0.85rem;
-    opacity: 0.7;
+.offcanvas .nav-link:hover,
+.offcanvas .nav-link.active {
+    background: rgba(255,255,255,0.1);
+    color: white !important;
 }
 
-/* Animations */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.btn-close-white {
+    filter: invert(1) grayscale(100%) brightness(200%);
 }
 
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateX(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
+.delete-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border-radius: 50%;
 }
 
-.fade-in {
-    animation: fadeIn 0.5s ease forwards;
+.file-preview {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
 }
 
-/* Mobile Responsive */
-@media (max-width: 768px) {
-    body {
-        padding-top: 60px;
-    }
-    
-    .navbar {
-        padding: 10px 0;
-    }
-    
-    .navbar-brand {
-        font-size: 1.2rem;
-    }
-    
-    .hero-section {
-        padding: 60px 0 40px;
-    }
-    
-    .hero-section h1 {
-        font-size: 1.8rem;
-    }
-    
-    .hero-section .lead {
-        font-size: 1rem;
-    }
-    
-    #materials {
-        padding: 30px 0;
-    }
-    
-    #materials h3 {
-        font-size: 1.5rem;
-    }
-    
-    .material-card {
-        margin-bottom: 20px;
-    }
-    
-    .material-card .card-body {
-        padding: 15px;
-    }
-    
-    .admin-section .row.g-3 {
-        margin: 0 -5px;
-    }
-    
-    .admin-section .col-md-3,
-    .admin-section .col-md-4,
-    .admin-section .col-md-8 {
-        padding: 0 5px;
-        margin-bottom: 10px;
-    }
-    
-    .admin-section .form-select,
-    .admin-section .form-control {
-        font-size: 0.9rem;
-        padding: 8px 12px;
-    }
-    
-    footer {
-        padding: 25px 0 15px;
-    }
+.video-preview {
+    width: 100%;
+    max-height: 200px;
+    border-radius: 5px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
 }
 
-/* Small Mobile */
-@media (max-width: 576px) {
-    .hero-section h1 {
-        font-size: 1.5rem;
-    }
-    
-    .mobile-warning {
-        top: 60px;
-        padding: 8px 10px;
-        font-size: 0.8rem;
-    }
-    
-    .navbar-collapse {
-        background: rgba(26, 35, 126, 0.95);
-        padding: 15px;
-        border-radius: 0 0 10px 10px;
-        margin-top: 10px;
-    }
-    
-    .nav-link {
-        padding: 10px 0;
-        border-bottom: 1px solid rgba(255,255,255,0.1);
-    }
-    
-    .nav-link:last-child {
-        border-bottom: none;
-    }
-}
-
-/* Fix for Bootstrap 5 */
-.btn:focus,
-.form-control:focus,
-.form-select:focus {
-    box-shadow: 0 0 0 0.25rem rgba(79, 195, 247, 0.25);
-    border-color: #4fc3f7;
-}
-
-/* Loading Spinner */
-.spinner-border {
-    width: 1.5rem;
-    height: 1.5rem;
-    border-width: 0.2em;
-}
-
-/* Alert Messages */
-.alert {
+.upload-area {
+    border: 2px dashed #4fc3f7;
     border-radius: 10px;
-    border: none;
-    padding: 15px;
+    padding: 30px;
+    text-align: center;
+    background: rgba(79, 195, 247, 0.05);
+    cursor: pointer;
+    transition: all 0.3s;
 }
 
-/* Button Styles */
-.btn-primary {
-    background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
-    border: none;
-}
-
-.btn-primary:hover {
-    background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
-    transform: translateY(-2px);
-}
-
-.btn-outline-primary {
-    color: #2196f3;
+.upload-area:hover {
+    background: rgba(79, 195, 247, 0.1);
     border-color: #2196f3;
 }
 
-.btn-outline-primary:hover {
-    background: #2196f3;
-    color: white;
+.table-hover tbody tr:hover {
+    background-color: rgba(0,0,0,0.03);
 }
 
-/* Scrollbar Styling */
-::-webkit-scrollbar {
-    width: 8px;
-}
-
-::-webkit-scrollbar-track {
-    background: #f1f1f1;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #555;
+@media (max-width: 768px) {
+    .mobile-warning {
+        display: block;
+    }
+    body {
+        font-size: 14px;
+    }
+    .container {
+        padding: 0 15px;
+    }
 }

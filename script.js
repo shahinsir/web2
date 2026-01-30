@@ -2,11 +2,10 @@
 // ADMIN SETTINGS - এখানে পরিবর্তন করুন
 // ==============================
 const ADMIN_PASSWORD = "shah82IN"; // আপনার পাসওয়ার্ড এখানে দিন
-// পাসওয়ার্ড চেঞ্জ করুন: "শিক্ষা১২৩" এর জায়গায় আপনার পাসওয়ার্ড দিন
-// ==============================
 
-// Storage Key
+// Storage Keys
 const STORAGE_KEY = 'education_portal_admin_files';
+const FEEDBACK_KEY = 'education_portal_feedback';
 
 // Check if running on mobile
 function isMobile() {
@@ -25,21 +24,19 @@ function requestDesktop() {
 window.addEventListener('load', function() {
     if(isMobile()) {
         console.log("Mobile device detected");
-        // Add mobile-specific fixes
         document.body.style.overflowX = 'hidden';
         document.body.style.width = '100%';
     }
     
-    // Load materials
     loadMaterials();
+    loadFileManagementTable();
     
-    // Check if admin was already logged in
     if(localStorage.getItem('admin_logged_in') === 'true') {
         showAdminPanel();
     }
 });
 
-// Admin Functions
+// Admin Functions (পুরানো ঠিক আছে)
 function showAdminLogin() {
     document.getElementById('adminLogin').style.display = 'block';
     document.getElementById('adminPanel').style.display = 'none';
@@ -50,7 +47,6 @@ function loginAdmin() {
     const password = document.getElementById('adminPass').value;
     
     if(password === ADMIN_PASSWORD) {
-        // Success
         localStorage.setItem('admin_logged_in', 'true');
         showAdminPanel();
         alert("✅ অ্যাডমিন লগিন সফল!");
@@ -62,18 +58,18 @@ function loginAdmin() {
 function showAdminPanel() {
     document.getElementById('adminLogin').style.display = 'none';
     document.getElementById('adminPanel').style.display = 'block';
+    loadFileManagementTable();
 }
 
 function logoutAdmin() {
     localStorage.removeItem('admin_logged_in');
     document.getElementById('adminLogin').style.display = 'none';
-    document.getElementById('adminPanel').style.display = 'block';
+    document.getElementById('adminPanel').style.display = 'none';
     alert("লগআউট সফল!");
 }
 
-// Add New File (Only Admin)
+// Add New File (পুরানো ঠিক আছে)
 function addFile() {
-    // Check if admin is logged in
     if(localStorage.getItem('admin_logged_in') !== 'true') {
         alert("❌ শুধু অ্যাডমিন ফাইল যোগ করতে পারবেন!");
         showAdminLogin();
@@ -86,13 +82,11 @@ function addFile() {
     const fileName = document.getElementById('fileName').value;
     const fileLink = document.getElementById('fileLink').value;
     
-    // Validation
     if(!fileLink) {
         alert("❌ লিংক দিন!");
         return;
     }
     
-    // Class names in Bengali
     const classNames = {
         '6': 'ষষ্ঠ শ্রেণি',
         '7': 'সপ্তম শ্রেণি',
@@ -101,7 +95,6 @@ function addFile() {
         '10': 'দশম শ্রেণি'
     };
     
-    // Subject names in Bengali
     const subjectNames = {
         'bangla': 'বাংলা',
         'english': 'ইংরেজি',
@@ -111,7 +104,6 @@ function addFile() {
         'agriculture': 'কৃষি শিক্ষা'
     };
     
-    // Create file object
     const newFile = {
         id: Date.now(),
         class: fileClass,
@@ -123,23 +115,216 @@ function addFile() {
         addedBy: 'Admin'
     };
     
-    // Save to localStorage
     let files = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-    files.unshift(newFile); // Add to beginning
+    files.unshift(newFile);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(files));
     
-    // Clear form
     document.getElementById('fileName').value = '';
     document.getElementById('fileLink').value = '';
     
-    // Show success
     alert(`✅ ফাইল যোগ করা হয়েছে!\n${classNames[fileClass]} - ${subjectNames[fileSubject]}`);
     
-    // Reload materials
     loadMaterials();
+    loadFileManagementTable();
 }
 
-// Load and Display Materials
+// NEW FUNCTION: Handle Direct File Upload (ছবি/ভিডিও সরাসরি)
+function handleDirectUpload(input) {
+    if(localStorage.getItem('admin_logged_in') !== 'true') {
+        alert("❌ শুধু অ্যাডমিন ফাইল আপলোড করতে পারবেন!");
+        return;
+    }
+    
+    const file = input.files[0];
+    if (!file) return;
+    
+    // File size check (10MB limit)
+    if (file.size > 10 * 1024 * 1024) {
+        alert("❌ ফাইলের সাইজ 10MB এর বেশি হতে পারবে না!");
+        return;
+    }
+    
+    // File type check
+    const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'video/mp4', 'video/avi'];
+    if (!validTypes.includes(file.type)) {
+        alert("❌ শুধু ছবি (JPG, PNG, GIF) এবং ভিডিও (MP4, AVI) ফাইল আপলোড করা যাবে!");
+        return;
+    }
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        // Create a Base64 string
+        const base64String = e.target.result;
+        
+        // For images and videos, we'll store as Base64 (for small files)
+        // For larger files, in real application you would upload to server
+        // Since this is GitHub Pages, we'll use Base64 for demo
+        
+        const fileClass = document.getElementById('fileClass').value;
+        const fileSubject = document.getElementById('fileSubject').value;
+        const fileType = file.type.startsWith('image/') ? 'image' : 'video';
+        const fileName = document.getElementById('fileName').value || file.name;
+        
+        const classNames = {
+            '6': 'ষষ্ঠ শ্রেণি',
+            '7': 'সপ্তম শ্রেণি',
+            '8': 'অষ্টম শ্রেণি',
+            '9': 'নবম শ্রেণি',
+            '10': 'দশম শ্রেণি'
+        };
+        
+        const subjectNames = {
+            'bangla': 'বাংলা',
+            'english': 'ইংরেজি',
+            'math': 'গণিত',
+            'science': 'বিজ্ঞান',
+            'ict': 'ICT',
+            'agriculture': 'কৃষি শিক্ষা'
+        };
+        
+        const newFile = {
+            id: Date.now(),
+            class: fileClass,
+            subject: fileSubject,
+            type: fileType,
+            name: fileName,
+            link: base64String, // Storing as Base64
+            date: new Date().toLocaleDateString('bn-BD'),
+            addedBy: 'Admin',
+            isBase64: true
+        };
+        
+        let files = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+        files.unshift(newFile);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(files));
+        
+        alert(`✅ ${fileType === 'image' ? 'ছবি' : 'ভিডিও'} আপলোড সফল!`);
+        
+        // Show preview
+        const previewDiv = document.getElementById('uploadPreview');
+        if (fileType === 'image') {
+            previewDiv.innerHTML = `
+                <div class="alert alert-success">
+                    <p>ছবি আপলোড সফল!</p>
+                    <img src="${base64String}" class="file-preview" style="max-width: 200px;">
+                </div>
+            `;
+        } else {
+            previewDiv.innerHTML = `
+                <div class="alert alert-success">
+                    <p>ভিডিও আপলোড সফল!</p>
+                    <video controls class="video-preview" style="max-width: 300px;">
+                        <source src="${base64String}" type="${file.type}">
+                    </video>
+                </div>
+            `;
+        }
+        
+        loadMaterials();
+        loadFileManagementTable();
+        input.value = ''; // Reset file input
+    };
+    
+    reader.readAsDataURL(file);
+}
+
+// NEW FUNCTION: Load File Management Table
+function loadFileManagementTable() {
+    if(localStorage.getItem('admin_logged_in') !== 'true') return;
+    
+    const files = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    const tableBody = document.getElementById('fileManagementTable');
+    
+    if(files.length === 0) {
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="5" class="text-center">কোনো ফাইল পাওয়া যায়নি</td>
+            </tr>
+        `;
+        return;
+    }
+    
+    const classNames = {
+        '6': '৬ষ্ঠ', '7': '৭ম', '8': '৮ম', '9': '৯ম', '10': '১০ম'
+    };
+    
+    const subjectNames = {
+        'bangla': 'বাংলা', 'english': 'ইং', 'math': 'গণিত', 
+        'science': 'বিজ্ঞান', 'ict': 'ICT', 'agriculture': 'কৃষি'
+    };
+    
+    let html = '';
+    
+    files.forEach(file => {
+        html += `
+            <tr>
+                <td>${file.name.substring(0, 30)}${file.name.length > 30 ? '...' : ''}</td>
+                <td>${classNames[file.class]}</td>
+                <td>${subjectNames[file.subject]}</td>
+                <td>
+                    <span class="badge ${file.type === 'pdf' ? 'bg-danger' : 
+                                     file.type === 'video' ? 'bg-warning' : 
+                                     file.type === 'image' ? 'bg-success' : 'bg-primary'}">
+                        ${file.type}
+                    </span>
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-danger" onclick="deleteFile(${file.id})">
+                        <i class="fas fa-trash"></i> ডিলিট
+                    </button>
+                </td>
+            </tr>
+        `;
+    });
+    
+    tableBody.innerHTML = html;
+}
+
+// NEW FUNCTION: Delete File
+function deleteFile(fileId) {
+    if(localStorage.getItem('admin_logged_in') !== 'true') {
+        alert("❌ শুধু অ্যাডমিন ফাইল ডিলিট করতে পারবেন!");
+        return;
+    }
+    
+    if(!confirm("আপনি কি নিশ্চিত এই ফাইলটি ডিলিট করতে চান?")) {
+        return;
+    }
+    
+    let files = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    files = files.filter(file => file.id !== fileId);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(files));
+    
+    alert("✅ ফাইল ডিলিট করা হয়েছে!");
+    loadMaterials();
+    loadFileManagementTable();
+}
+
+// NEW FUNCTION: Submit Feedback
+function submitFeedback() {
+    const feedbackText = document.getElementById('feedbackText').value;
+    
+    if(!feedbackText.trim()) {
+        alert("❌ মতামত লিখুন!");
+        return;
+    }
+    
+    const feedback = {
+        id: Date.now(),
+        text: feedbackText,
+        date: new Date().toLocaleString('bn-BD'),
+        ip: 'user'
+    };
+    
+    let feedbacks = JSON.parse(localStorage.getItem(FEEDBACK_KEY)) || [];
+    feedbacks.unshift(feedback);
+    localStorage.setItem(FEEDBACK_KEY, JSON.stringify(feedbacks));
+    
+    document.getElementById('feedbackText').value = '';
+    alert("✅ আপনার মতামত সংরক্ষিত হয়েছে! ধন্যবাদ।");
+}
+
+// Load and Display Materials (পুরানো ঠিক আছে - শুধু Base64 support যোগ করা হয়েছে)
 function loadMaterials() {
     const files = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
     const container = document.getElementById('materialsGrid');
@@ -158,7 +343,6 @@ function loadMaterials() {
     let html = '';
     
     files.forEach(file => {
-        // Icons based on file type
         let icon = 'fa-file';
         let iconColor = 'primary';
         
@@ -176,7 +360,6 @@ function loadMaterials() {
             iconColor = 'primary';
         }
         
-        // Class and subject names
         const classNames = {
             '6': 'ষষ্ঠ শ্রেণি',
             '7': 'সপ্তম শ্রেণি',
@@ -194,10 +377,34 @@ function loadMaterials() {
             'agriculture': 'কৃষি শিক্ষা'
         };
         
+        // For Base64 files, show preview
+        let fileContent = '';
+        if(file.isBase64 && file.type === 'image') {
+            fileContent = `
+                <div class="text-center mb-3">
+                    <img src="${file.link}" class="file-preview" alt="${file.name}">
+                </div>
+            `;
+        } else if(file.isBase64 && file.type === 'video') {
+            fileContent = `
+                <div class="text-center mb-3">
+                    <video controls class="video-preview">
+                        <source src="${file.link}" type="video/mp4">
+                    </video>
+                </div>
+            `;
+        }
+        
         html += `
             <div class="col-md-4 mb-4">
-                <div class="card material-card h-100">
+                <div class="card material-card h-100" style="position: relative;">
+                    ${localStorage.getItem('admin_logged_in') === 'true' ? `
+                        <button class="btn btn-sm btn-danger delete-btn" onclick="deleteFile(${file.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    ` : ''}
                     <div class="card-body">
+                        ${fileContent}
                         <div class="d-flex justify-content-between align-items-start mb-3">
                             <div>
                                 <span class="badge bg-primary">${classNames[file.class]}</span>
@@ -212,8 +419,10 @@ function loadMaterials() {
                                 <i class="fas fa-user-tie"></i> অ্যাডমিন দ্বারা যোগকৃত
                             </small>
                         </p>
-                        <a href="${file.link}" target="_blank" class="btn btn-outline-primary w-100">
-                            <i class="fas fa-external-link-alt"></i> ওপেন করুন
+                        <a href="${file.link}" ${file.isBase64 ? '' : 'target="_blank"'} 
+                           class="btn btn-outline-primary w-100">
+                            <i class="fas fa-external-link-alt"></i> 
+                            ${file.type === 'image' || file.type === 'video' ? 'দেখুন' : 'ওপেন করুন'}
                         </a>
                     </div>
                 </div>
@@ -224,7 +433,7 @@ function loadMaterials() {
     container.innerHTML = html;
 }
 
-// Filter Materials
+// Filter Materials (পুরানো ঠিক আছে)
 function filterMaterials() {
     const filterClass = document.getElementById('filterClass').value;
     const filterSubject = document.getElementById('filterSubject').value;
@@ -238,7 +447,6 @@ function filterMaterials() {
         return;
     }
     
-    // Filter files
     const filtered = files.filter(file => {
         if(filterClass !== 'all' && file.class !== filterClass) return false;
         if(filterSubject !== 'all' && file.subject !== filterSubject) return false;
@@ -257,7 +465,6 @@ function filterMaterials() {
         return;
     }
     
-    // Display filtered files
     let html = '';
     
     filtered.forEach(file => {
@@ -279,10 +486,33 @@ function filterMaterials() {
             'science': 'বিজ্ঞান', 'ict': 'ICT', 'agriculture': 'কৃষি শিক্ষা'
         };
         
+        let fileContent = '';
+        if(file.isBase64 && file.type === 'image') {
+            fileContent = `
+                <div class="text-center mb-3">
+                    <img src="${file.link}" class="file-preview" alt="${file.name}">
+                </div>
+            `;
+        } else if(file.isBase64 && file.type === 'video') {
+            fileContent = `
+                <div class="text-center mb-3">
+                    <video controls class="video-preview">
+                        <source src="${file.link}" type="video/mp4">
+                    </video>
+                </div>
+            `;
+        }
+        
         html += `
             <div class="col-md-4 mb-4">
-                <div class="card material-card h-100">
+                <div class="card material-card h-100" style="position: relative;">
+                    ${localStorage.getItem('admin_logged_in') === 'true' ? `
+                        <button class="btn btn-sm btn-danger delete-btn" onclick="deleteFile(${file.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    ` : ''}
                     <div class="card-body">
+                        ${fileContent}
                         <div class="d-flex justify-content-between align-items-start mb-3">
                             <div>
                                 <span class="badge bg-primary">${classNames[file.class]}</span>
@@ -291,8 +521,10 @@ function filterMaterials() {
                             <i class="fas ${icon} fa-2x text-${iconColor}"></i>
                         </div>
                         <h5 class="card-title">${file.name}</h5>
-                        <a href="${file.link}" target="_blank" class="btn btn-outline-primary w-100">
-                            <i class="fas fa-external-link-alt"></i> ওপেন করুন
+                        <a href="${file.link}" ${file.isBase64 ? '' : 'target="_blank"'} 
+                           class="btn btn-outline-primary w-100">
+                            <i class="fas fa-external-link-alt"></i> 
+                            ${file.type === 'image' || file.type === 'video' ? 'দেখুন' : 'ওপেন করুন'}
                         </a>
                     </div>
                 </div>
@@ -303,7 +535,7 @@ function filterMaterials() {
     container.innerHTML = html;
 }
 
-// Export/Import Functions (For Admin Backup)
+// Export/Import Functions (For Admin Backup) - পুরানো
 function exportData() {
     if(localStorage.getItem('admin_logged_in') !== 'true') {
         alert("শুধু অ্যাডমিন!");
@@ -341,6 +573,7 @@ function importData() {
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
                 alert("✅ ডেটা ইম্পোর্ট সফল!");
                 loadMaterials();
+                loadFileManagementTable();
             } catch(err) {
                 alert("❌ ভুল ফাইল ফরমেট!");
             }
@@ -350,7 +583,7 @@ function importData() {
     input.click();
 }
 
-// Initialize with sample data (First time only)
+// Initialize with sample data
 function initializeSampleData() {
     if(!localStorage.getItem(STORAGE_KEY)) {
         const sampleData = [
