@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>শিক্ষা পোর্টাল | Admin Only Upload</title>
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Hind Siliguri', sans-serif; }
+        body { padding-top: 70px; background: #f8f9fa; }
+        .navbar { background: linear-gradient(135deg, #1a237e 0%, #311b92 100%); }
+        .hero-section { background: linear-gradient(135deg, #311b92 0%, #4527a0 100%); color: white; padding: 100px 0; }
+        .material-card { transition: transform 0.3s; border: none; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .material-card:hover { transform: translateY(-5px); }
+        .admin-section { display: none; background: #fff3cd; border-left: 5px solid #ffc107; }
+        .mobile-warning { display: none; }
+        @media (max-width: 768px) {
+            .mobile-warning { display: block; }
+            body { font-size: 14px; }
+            .container { padding: 0 15px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Warning -->
+    <div class="mobile-warning alert alert-info m-2">
+        <i class="fas fa-mobile-alt"></i> মোবাইলে সুন্দরভাবে দেখতে ক্লিক করুন: 
+        <button class="btn btn-sm btn-primary" onclick="requestDesktop()">ডেস্কটপ ভিউ</button>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-graduation-cap"></i> শিক্ষা পোর্টাল
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="#home">হোম</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#materials">উপকরণ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" onclick="showAdminLogin()">অ্যাডমিন</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section">
+        <div class="container text-center">
+            <h1 class="display-5 fw-bold">ডিজিটাল শিক্ষা পোর্টাল</h1>
+            <p class="lead">ক্লাস ৬-১০ এর সকল শিক্ষা উপকরণ এক জায়গায়</p>
+            <p><strong>বাংলা, ইংরেজি, গণিত, বিজ্ঞান, ICT, কৃষি শিক্ষা</strong></p>
+        </div>
+    </section>
+
+    <!-- Admin Login (Hidden Initially) -->
+    <div id="adminLogin" class="container mt-4" style="display: none;">
+        <div class="card shadow">
+            <div class="card-header bg-warning">
+                <h5 class="mb-0"><i class="fas fa-lock"></i> অ্যাডমিন এক্সেস</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label>পাসওয়ার্ড দিন:</label>
+                    <input type="password" id="adminPass" class="form-control" placeholder="শুধু অ্যাডমিনের জন্য">
+                </div>
+                <button class="btn btn-danger w-100" onclick="loginAdmin()">
+                    <i class="fas fa-sign-in-alt"></i> লগিন করুন
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Panel (Hidden Initially) -->
+    <div id="adminPanel" class="container mt-4 admin-section" style="display: none;">
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="fas fa-user-shield"></i> অ্যাডমিন প্যানেল - শুধু আপনার জন্য</h5>
+            </div>
+            <div class="card-body">
+                <h6>নতুন ফাইল যোগ করুন:</h6>
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <select class="form-select" id="fileClass">
+                            <option value="6">ষষ্ঠ শ্রেণি</option>
+                            <option value="7">সপ্তম শ্রেণি</option>
+                            <option value="8">অষ্টম শ্রেণি</option>
+                            <option value="9">নবম শ্রেণি</option>
+                            <option value="10">দশম শ্রেণি</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select" id="fileSubject">
+                            <option value="bangla">বাংলা</option>
+                            <option value="english">ইংরেজি</option>
+                            <option value="math">গণিত</option>
+                            <option value="science">বিজ্ঞান</option>
+                            <option value="ict">ICT</option>
+                            <option value="agriculture">কৃষি শিক্ষা</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select" id="fileType">
+                            <option value="pdf">PDF</option>
+                            <option value="video">ভিডিও</option>
+                            <option value="image">ছবি</option>
+                            <option value="doc">ডকুমেন্ট</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" class="form-control" id="fileName" placeholder="ফাইলের নাম">
+                    </div>
+                    <div class="col-md-8">
+                        <input type="url" class="form-control" id="fileLink" 
+                               placeholder="Google Drive/ImgBB/YouTube লিংক">
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-primary w-100" onclick="addFile()">
+                            <i class="fas fa-plus"></i> যোগ করুন
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Instructions -->
+                <div class="mt-4">
+                    <h6><i class="fas fa-info-circle"></i> কিভাবে ফাইল আপলোড দিবেন:</h6>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6><i class="fab fa-google-drive text-primary"></i> Google Drive</h6>
+                                    <ol class="small">
+                                        <li>drive.google.com এ যান</li>
+                                        <li>ফাইল আপলোড করুন</li>
+                                        <li>লিংক শেয়ার করুন</li>
+                                        <li>"Anyone with link" করুন</li>
+                                        <li>লিংক কপি করুন</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6><i class="fas fa-image text-success"></i> ছবির জন্য</h6>
+                                    <ol class="small">
+                                        <li>imgbb.com এ যান</li>
+                                        <li>ছবি আপলোড করুন</li>
+                                        <li>Direct Link কপি করুন</li>
+                                        <li>লিংক পেস্ট করুন</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6><i class="fab fa-youtube text-danger"></i> ভিডিওর জন্য</h6>
+                                    <ol class="small">
+                                        <li>YouTube এ আপলোড করুন</li>
+                                        <li>ভিডিও লিংক কপি করুন</li>
+                                        <li>লিংক পেস্ট করুন</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Materials Display -->
+    <section id="materials" class="container mt-5">
+        <h3 class="mb-4"><i class="fas fa-book-open"></i> শিক্ষা উপকরণ</h3>
+        
+        <!-- Filters -->
+        <div class="row mb-4">
+            <div class="col-md-3 mb-2">
+                <select class="form-select" onchange="filterMaterials()" id="filterClass">
+                    <option value="all">সকল ক্লাস</option>
+                    <option value="6">ষষ্ঠ শ্রেণি</option>
+                    <option value="7">সপ্তম শ্রেণি</option>
+                    <option value="8">অষ্টম শ্রেণি</option>
+                    <option value="9">নবম শ্রেণি</option>
+                    <option value="10">দশম শ্রেণি</option>
+                </select>
+            </div>
+            <div class="col-md-3 mb-2">
+                <select class="form-select" onchange="filterMaterials()" id="filterSubject">
+                    <option value="all">সকল বিষয়</option>
+                    <option value="bangla">বাংলা</option>
+                    <option value="english">ইংরেজি</option>
+                    <option value="math">গণিত</option>
+                    <option value="science">বিজ্ঞান</option>
+                    <option value="ict">ICT</option>
+                    <option value="agriculture">কৃষি শিক্ষা</option>
+                </select>
+            </div>
+            <div class="col-md-3 mb-2">
+                <select class="form-select" onchange="filterMaterials()" id="filterType">
+                    <option value="all">সব ধরন</option>
+                    <option value="pdf">PDF</option>
+                    <option value="video">ভিডিও</option>
+                    <option value="image">ছবি</option>
+                    <option value="doc">ডকুমেন্ট</option>
+                </select>
+            </div>
+            <div class="col-md-3 mb-2">
+                <button class="btn btn-outline-primary w-100" onclick="loadMaterials()">
+                    <i class="fas fa-sync"></i> রিফ্রেশ
+                </button>
+            </div>
+        </div>
+        
+        <!-- Materials Grid -->
+        <div class="row" id="materialsGrid">
+            <!-- Dynamic Content -->
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white mt-5 py-4">
+        <div class="container text-center">
+            <p>শিক্ষা পোর্টাল | ক্লাস ৬-১০ | শুধু পড়ার উপকরণ</p>
+            <p class="small">সব ফাইল শুধু অ্যাডমিন দ্বারা যোগ করা হয়</p>
+            <p class="small">GitHub Pages এ হোস্টেড</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="script.js"></script>
+</body>
+</html>
